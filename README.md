@@ -1,108 +1,95 @@
-# StudyMates
+# StudyMate
 
-Web-based platform for students to create study groups, share resources, and collaborate efficiently. Includes modular backend, frontend, and database components, with Docker-based environment for easy setup and reproducibility.
+StudyMate is a web-based collaboration platform that allows students to create study groups, share learning resources, and collaborate in real time. The system provides a modular backend, responsive interface, and containerized deployment for easy setup and reproducibility.
 
-## Project Overview
+## ⚙️ Project Overview
 
-**StudyMate / StudyTogether** is a lightweight web-based platform that allows students to create study groups, share resources, chat in real-time, and track collaborative study sessions.
+StudyMate enables peer-to-peer learning and group collaboration through shared study rooms, real-time chat, resource sharing, and productivity tools such as the Pomodoro timer. It is built with a lightweight Node.js architecture and designed for easy scaling and deployment using Docker and Jenkins CI/CD.
 
 ### Key Objectives
-- Enable peer-to-peer learning
-- Provide a centralized platform for study resources
-- Deliver a modular, lightweight, and fully functional system with real-time features
 
-## Technology Stack
+- Facilitate collaborative and structured study sessions
+- Provide real-time communication and shared resources
+- Maintain a modular, maintainable, and easily deployable codebase
 
-### Programming Language
-- **Node.js** (Backend)
-- **JavaScript** (Frontend)
+## 🧩 Technology Stack
 
-### Web Development
-- **HTML5**, **CSS3**, **JavaScript** (Core frontend)
-- **Materialize CSS** (Lightweight UI components)
-- **EJS** (Server-side rendering)
-- **Passport.js** (Authentication)
+### Frontend
+- **HTML5, CSS3, JavaScript**
+- **Bootstrap 5** for responsive UI design
 
 ### Backend
-- **Express.js** – Server and API routes
-- **Node.js modules** – Controllers, routes, middleware
+- **Node.js and Express.js** – Core API and server
+- **Socket.io** – Real-time messaging and room updates
+- **Passport.js with JWT** – Secure authentication
 
 ### Database
-- **MongoDB** – Cloud or local instance
-- **Mongoose** – ODM for modeling and interacting with MongoDB
+- **MongoDB Atlas** (cloud-hosted)
+- **Mongoose** for schema modeling and data access
 
-### Containerization
-- **Docker** – Backend + MongoDB containers
-- **docker-compose** – Manage multi-container setup
+### DevOps
+- **Docker + Docker Compose** for containerized deployment
+- **Jenkins** for CI/CD pipeline automation
 
-### Tools
-- **Git/GitHub** – Version control with feature branches
-- **Trello** – Task management, progress tracking
-- **Postman** – API testing
-- **VSCode** – Recommended IDE
+### Testing
+- **Jest** – Unit and integration testing
+- **Cypress** – End-to-end testing suite
 
-## Features
+## 🚀 Features
 
-- **Authentication** – Registration, login, JWT-based session management
-- **Role-based Access Control** – Admin vs Member permissions
-- **CRUD Operations** – Users, Rooms, Notes, Chat messages
-- **Pomodoro Timer** – Per-room timer with session tracking
-- **Real-time Chat** – Room-specific message persistence
-- **Real-time Notifications** – Visual/audio alerts for session start/end
-- **Responsive UI** – Mobile-first design for dashboard and room
+- **Authentication & Authorization** – User registration, login, and JWT-based session management with role-based access for Admins and Members
+- **Study Rooms & Collaboration** – Create or join rooms, share notes, and manage member access
+- **Real-time Chat** – Persistent, room-specific chat using Socket.io
+- **Pomodoro Timer** – Collaborative session timer with visual and audio notifications
+- **Responsive Interface** – Mobile-friendly UI powered by Bootstrap
+- **Containerized Deployment** – Backend and database run in Docker containers for easy setup
+- **CI/CD Integration** – Jenkins pipeline automates build, test, and deployment stages
 
-## Folder Structure
+## 📁 Folder Structure
 
 ```
 StudyMate/
 │
-├── backend/             # Backend server code (Node.js + Express)
-│   ├── controllers/     # Request handlers
+├── backend/             # Node.js + Express backend
+│   ├── controllers/     # Business logic and handlers
 │   ├── models/          # Mongoose schemas
-│   ├── routes/          # API routes
+│   ├── routes/          # API route definitions
 │   ├── middleware/      # Authentication, validation, roles
-│   ├── utils/           # Helper functions
-│   └── app.js           # Main server file
+│   ├── utils/           # Helper utilities
+│   └── app.js           # Server entry point
 │
-├── frontend/            # Frontend HTML/CSS/JS + Materialize + EJS
-│   ├── views/           # EJS templates
-│   └── public/          # Static CSS, JS, images
+├── frontend/            # Static frontend resources
+│   ├── public/          # HTML, CSS, JS, images
+│   └── views/           # Static page templates
 │
-├── database/            # MongoDB setup notes or local seed data
-│
-├── docker/              # Docker setup
-│   ├── Dockerfile       # Backend Dockerfile
+├── docker/              # Docker and Compose setup
+│   ├── Dockerfile
 │   └── docker-compose.yml
 │
-├── docs/                # Documentation: API docs, UI/UX notes, SRS
+├── docs/                # Documentation (API, testing, design)
+│   ├── api.md           # API endpoints and examples
+│   ├── testing.md       # Test plans and results
+│   ├── uiux.md          # Design decisions and wireframes
+│   └── srs.md           # Software requirements specification
 │
 └── README.md
 ```
 
-## Branch Strategy
-
-- **main**: Stable, tested version
-- **dev**: Integration branch for ongoing development
-- **feature/***: Individual feature branches matching Trello tasks
-  - Example: `feature/auth-api-setup`, `feature/timer-ui-component`
-
-> Use pull requests to merge features into `dev`. Fully test before merging into `main`.
-
-## Getting Started
+## ⚡ Getting Started
 
 ### Prerequisites
 
-- **Node.js** (v16.0 or higher)
+- **Node.js** v16+
 - **npm** or **yarn**
-- **MongoDB** (local installation or MongoDB Atlas)
-- **Docker Desktop** (for containerized setup)
+- **Docker Desktop**
+- **MongoDB Atlas URI**
 - **Git**
 
-### Setup Instructions
+### Local Setup
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/StudyMate.git
+   git clone https://github.com/BikuDas-Deakin/StudyMate.git
    cd StudyMate
    ```
 
@@ -112,141 +99,112 @@ StudyMate/
    npm install
    ```
 
-3. **Create .env file with environment variables**
+3. **Create `.env` file in the backend directory**
    ```env
-   PORT=4000
-   MONGO_URI=<your-mongodb-uri>
+   PORT=5000
+   MONGO_URI=<your-mongodb-atlas-uri>
    JWT_SECRET=<your-jwt-secret>
    NODE_ENV=development
    ```
 
-4. **Start the server (development)**
+4. **Run development server**
    ```bash
    npm run dev
    ```
 
-5. **Access the frontend via the Express routes or EJS templates**
-   - Application: `http://localhost:4000`
+5. **Access the app**
+   ```
+   http://localhost:5000
+   ```
 
-## Docker Setup
+## 🐳 Docker Deployment
 
-## Docker (HD)
-Build & run:
-  cd backend/docker
-  docker compose build
-  docker compose up
-
-Access:
-  http://localhost:5000/api/student
-
-Expected output:
-  {"name":"Mehakpreet Singh Sohal","studentId":"225257699"}
-
-1. **Install Docker Desktop**
-
-2. **Navigate to the `docker/` folder**
+1. **Navigate to the docker directory**
    ```bash
    cd docker/
    ```
 
-3. **Build Docker images**
+2. **Build and start containers**
    ```bash
    docker-compose build
-   ```
-
-4. **Run containers**
-   ```bash
    docker-compose up
    ```
 
-5. **Verify backend and MongoDB services are running and accessible**
-   - Backend: `http://localhost:4000`
+3. **Access running services**
+   - Backend: `http://localhost:5000`
    - MongoDB: `localhost:27017`
 
-6. **Stop containers**
+4. **Stop containers**
    ```bash
    docker-compose down
    ```
 
-## Available Scripts
+## 🧪 Testing
+
+Run the following scripts from the `backend/` directory:
 
 ```bash
-# Development
-npm run dev          # Start development server with nodemon
-npm start           # Start production server
+# Unit tests with Jest
+npm test
 
-# Testing
-npm test            # Run unit tests
-npm run test:watch  # Run tests in watch mode
-
-# Docker
-docker-compose up   # Start all services
-docker-compose down # Stop all services
+# End-to-end tests with Cypress
+npm run cypress:open
 ```
 
-## Testing
+Test coverage includes authentication, CRUD operations, and socket-based chat functionality.
 
-- **Unit tests** using Jest or Mocha
-- **End-to-end testing** with Cypress (optional)
-- Document all test scripts in `/docs/testing.md`
+## 🔁 CI/CD Pipeline
 
-### Test Structure
-```
-tests/
-├── unit/           # Unit tests for controllers and utilities
-├── integration/    # API endpoint tests
-└── fixtures/       # Test data and mocks
-```
+StudyMate includes a Jenkins pipeline that automates:
 
-## Contribution Guidelines
+- Source checkout from GitHub
+- Docker image build and containerization
+- Automated test execution
+- Deployment to a containerized environment
 
-1. **Task Management**: Each feature/task corresponds to a Trello card
-2. **Branch Workflow**: Use feature branches and pull requests
-3. **Code Quality**: Include inline documentation and code comments
-4. **Time Tracking**: Log hours in Trello for each task
-5. **Documentation**: Update `/docs/` with relevant API changes, UI updates, and design notes
+Pipeline configuration can be found in the root `Jenkinsfile`.
 
-### Workflow
+## 👥 Team
 
-1. Assign yourself to a Trello card
-2. Create feature branch from `dev`
+**Project: StudyMate**
+
+| Name | Role |
+|------|------|
+| Bisheshwar | Full Stack Developer / Project Lead |
+| Anusha | Frontend Developer & UI/UX Designer |
+| Mehakpreet Singh Sohal | Backend Developer & DevOps Engineer |
+
+## 📚 Documentation
+
+- `/docs/api.md` – API endpoints and sample requests
+- `/docs/testing.md` – Test plans and results
+- `/docs/uiux.md` – Design decisions and wireframes
+- `/docs/srs.md` – Functional & non-functional requirements
+
+## 🧠 Contribution Workflow
+
+1. Work from the `dev` branch
+2. Create a feature branch
    ```bash
-   git checkout dev
-   git pull origin dev
-   git checkout -b feature/your-feature-name
+   git checkout -b feature/<feature-name>
    ```
-3. Develop and test your feature
-4. Create pull request to `dev` branch
-5. Request review from team member
-6. Merge after approval and testing
+3. Develop, test, and commit changes
+4. Open a Pull Request to `dev`
+5. Merge into `main` after review and testing
 
-## Documentation
+## 🛠️ Tools & Resources
 
-- **`/docs/api.md`** → API endpoints, request/response examples
-- **`/docs/uiux.md`** → Wireframes, color palettes, UI decisions
-- **`/docs/srs.md`** → Functional & non-functional requirements
-- **`/docs/testing.md`** → Test cases, scripts, results
+- **GitHub Repository**: [https://github.com/BikuDas-Deakin/StudyMate](https://github.com/BikuDas-Deakin/StudyMate)
+- **Trello Board**: [StudyMate Project Board](https://trello.com/invite/b/68b7ef1e0722ebe79760e74d/ATTI0bc6f91b8f3d0256dd20099cbbb1c5e9E5E19FF6/studymate)
 
-## Team
+## 📞 Support
 
-**Project: StudyMate / StudyTogether**
+For issues or contributions:
 
-- **Bisheshwar** - Full Stack Developer
-- **Anusha** - Frontend Developer & UI/UX Designer
-- **Mehakpreet Singh** - Backend Developer & DevOps
+- Check existing GitHub issues
+- Open a new issue with clear details
+- Contact team members via project communication channels
 
-## Resources
+---
 
-- **GitHub Repository**: https://github.com/BikuDas-Deakin/StudyMate
-- **Trello Board**: https://trello.com/invite/b/68b7ef1e0722ebe79760e74d/ATTI0bc6f91b8f3d0256dd20099cbbb1c5e9E5E19FF6/studymate
-- **API Documentation**: See `/docs/api.md`
-- **Design Guidelines**: See `/docs/uiux.md`
-
-## Support
-
-For questions or issues:
-1. Check existing GitHub Issues
-2. Create a new issue with detailed description
-3. Contact team members via project communication channels
-4. Refer to documentation in `/docs/` folder
-
+**Built with ❤️ by the StudyMate Team**
