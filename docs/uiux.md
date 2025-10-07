@@ -2296,4 +2296,781 @@ button:disabled {
     - Enter new password
     - Click Change
     - Update room code
-    -
+    - Share new code with participants
+    ↓
+4D. Manage Participants:
+    - View all participants
+    - Click "Kick" on user
+    - Confirm action
+    - Remove user from room
+    - User redirected to dashboard
+    ↓
+4E. End Room:
+    - Click "End Room" in danger zone
+    - Confirm destructive action
+    - End session for all
+    - Kick all participants
+    - Archive room data
+    - Redirect all to dashboard
+```
+
+### 9. Leave Room Flow
+
+```
+1. User clicks "Leave" button
+   ↓
+2. Confirmation dialog (optional):
+   - "Are you sure you want to leave?"
+   - Confirm / Cancel
+   ↓
+3. User confirms:
+   - Disconnect WebSocket
+   - Remove from participants list
+   - Notify other users (system message)
+   ↓
+4. Redirect to dashboard
+   ↓
+5. If user was admin:
+   - Transfer admin to next oldest participant
+   - OR end room if last participant
+```
+
+### 10. Copy Room Link/Code
+
+```
+1. User clicks "Copy Link" button
+   ↓
+2. System generates shareable link:
+   - Public: Direct room URL
+   - Private: URL with embedded code
+   ↓
+3. Copy to clipboard via navigator.clipboard API
+   ↓
+4. Show feedback:
+   - Toast notification: "Link copied!"
+   - Button flash animation
+   - Auto-dismiss after 3s
+   ↓
+5. User can share link:
+   - Paste in messaging apps
+   - Email
+   - Social media
+```
+
+### 11. Timer Control Flow (Admin)
+
+```
+1. Admin controls timer
+2. Timer states: Stopped → Playing → Paused
+   ↓
+3A. Start Timer:
+    - Click Play button
+    - Icon changes to Pause
+    - Broadcast start event
+    - All users see timer begin
+    ↓
+3B. Pause Timer:
+    - Click Pause button
+    - Icon changes to Play
+    - Broadcast pause event
+    - Timer freezes for all
+    ↓
+3C. Skip Phase:
+    - Click Skip button
+    - Advance to next phase
+    - Broadcast skip event
+    - All users transition
+    ↓
+3D. Reset Timer:
+    - Click Reset button
+    - Stop and reset to initial
+    - Broadcast reset event
+    - All users see reset
+    ↓
+4. Non-admin users:
+   - See controls (disabled)
+   - Cannot interact
+   - Only view timer state
+```
+
+### 12. Error Recovery Flows
+
+**Connection Loss**:
+```
+1. WebSocket disconnects
+2. Show warning indicator
+3. Attempt reconnection:
+   - Exponential backoff
+   - Max 5 attempts
+   ↓
+4. Success:
+   - Reconnect
+   - Sync state
+   - Resume normal operation
+   ↓
+5. Failure:
+   - Show error message
+   - Offer manual reconnect
+   - OR redirect to dashboard
+```
+
+**Session Timeout**:
+```
+1. JWT token expires
+2. API returns 401 Unauthorized
+3. Clear stored token
+4. Show session expired message
+5. Redirect to login
+6. After login: return to intended page
+```
+
+**Room No Longer Exists**:
+```
+1. User tries to join deleted room
+2. API returns 404 Not Found
+3. Show error message
+4. Redirect to dashboard
+5. Suggest browsing other rooms
+```
+
+---
+
+## Animation & Transitions
+
+### Standard Transitions
+
+**Duration Guidelines**:
+- Micro-interactions: 0.1-0.2s
+- Standard transitions: 0.2-0.3s
+- Page transitions: 0.3-0.5s
+- Slow reveals: 0.5-1s
+
+**Easing Functions**:
+```css
+ease-out: cubic-bezier(0, 0, 0.2, 1)    /* Decelerating */
+ease-in: cubic-bezier(0.4, 0, 1, 1)     /* Accelerating */
+ease-in-out: cubic-bezier(0.4, 0, 0.2, 1) /* Both */
+```
+
+### Specific Animations
+
+#### Pulse Animation (Status Indicators)
+```css
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+}
+
+.status-indicator {
+  animation: pulse 2s ease-in-out infinite;
+}
+```
+
+**Usage**: Online status dots, connection indicators
+
+#### Fade In (Messages, Content)
+```css
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message {
+  animation: fadeIn 0.3s ease-out;
+}
+```
+
+**Usage**: New chat messages, dynamic content
+
+#### Spin (Loading Spinners)
+```css
+@keyframes spin {
+  to { 
+    transform: rotate(360deg); 
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+```
+
+**Usage**: Loading indicators only
+
+#### Slide In (Modals, Panels)
+```css
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal {
+  animation: slideIn 0.3s ease-out;
+}
+```
+
+**Usage**: Modal entrances, dropdown menus
+
+#### Flash (Success Feedback)
+```css
+@keyframes flash {
+  0%, 100% { 
+    transform: scale(1); 
+  }
+  50% { 
+    transform: scale(1.1); 
+  }
+}
+
+.flash {
+  animation: flash 0.3s ease-in-out;
+}
+```
+
+**Usage**: Button clicks, successful actions
+
+#### Shake (Error Feedback)
+```css
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.error-shake {
+  animation: shake 0.5s ease-in-out;
+}
+```
+
+**Usage**: Form validation errors, failed actions
+
+### Hover & Interaction States
+
+#### Button Hover
+```css
+.button {
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+```
+
+#### Card Hover
+```css
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+```
+
+#### Input Focus
+```css
+.input {
+  transition: border-color 0.2s ease;
+}
+
+.input:focus {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+```
+
+### Performance Optimization
+
+**GPU Acceleration**:
+```css
+.animated-element {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+```
+
+**Avoid**:
+- Animating `width`, `height`, `top`, `left`
+- Animating `box-shadow` excessively
+- Too many simultaneous animations
+
+**Prefer**:
+- `transform` (translate, scale, rotate)
+- `opacity`
+- `filter` (with caution)
+
+---
+
+## Design Patterns
+
+### Navigation Patterns
+
+#### Primary Navigation
+- **Location**: Top header
+- **Type**: Global navigation
+- **Elements**: Logo, page title, user actions
+- **Persistent**: Yes, across all pages
+
+#### Secondary Navigation
+- **Location**: Sidebar (participants) or tabs (settings)
+- **Type**: Contextual navigation
+- **Collapsible**: On mobile
+
+### Content Patterns
+
+#### Cards Pattern
+**Usage**: Rooms, stats, content grouping
+- Contained, elevated surfaces
+- Clear hierarchy
+- Actionable elements
+- Consistent padding
+
+#### List Pattern
+**Usage**: Participants, chat messages
+- Vertical stacking
+- Scrollable
+- Individual items selectable/actionable
+- Empty states
+
+#### Form Pattern
+**Usage**: Login, register, create room, settings
+- Vertical layout
+- Labels above inputs
+- Grouped related fields
+- Clear submit action
+- Inline validation
+
+### Feedback Patterns
+
+#### Toast Notifications
+```css
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease-out;
+  z-index: 1000;
+}
+```
+
+**Types**:
+- Success: Green background, checkmark icon
+- Error: Red background, X icon
+- Warning: Orange background, exclamation icon
+- Info: Blue background, info icon
+
+**Duration**: 3-5 seconds, auto-dismiss
+
+#### Loading States
+- **Button**: Spinner + "Loading..." text, disabled
+- **Page**: Full-screen overlay with spinner
+- **Inline**: Skeleton screens or spinners in place
+
+#### Empty States
+- **Icon**: Large, relevant icon (people, chat, etc.)
+- **Message**: Friendly, actionable text
+- **Action**: Button to create/add content (optional)
+
+### Layout Patterns
+
+#### Split View (Room Page)
+- Three-panel layout
+- Fixed side panels, flexible center
+- Responsive: Stacks on mobile
+
+#### Centered Container (Auth Pages)
+- Single focus point
+- Max-width constraint
+- Vertical and horizontal centering
+- Gradient background
+
+#### Dashboard Grid
+- Responsive grid
+- Cards auto-flow
+- Equal heights (flex)
+- Consistent gaps
+
+---
+
+## Best Practices
+
+### Design Consistency
+
+1. **Color Usage**:
+   - Primary blue: Main actions, headers, links
+   - Green: Success, positive actions, own messages
+   - Red: Errors, danger, destructive actions
+   - Gray: Neutral, disabled, secondary
+
+2. **Spacing**:
+   - Use 4px spacing scale consistently
+   - Maintain rhythm in vertical spacing
+   - Group related elements
+
+3. **Typography**:
+   - Hierarchy: h1 > h2 > h3 > body > small
+   - Consistent weights: 400 (normal), 500 (medium), 600 (semibold), 700 (bold)
+   - Limited font families: Inter for UI, JetBrains Mono for code/timer
+
+4. **Icons**:
+   - Use Bootstrap Icons consistently
+   - Size: 1rem for inline, 1.25rem for buttons
+   - Color: Inherit from parent or specific semantic color
+
+### User Experience
+
+1. **Feedback**:
+   - Always acknowledge user actions
+   - Provide clear error messages
+   - Show loading states
+   - Confirm destructive actions
+
+2. **Performance**:
+   - Optimize images
+   - Minimize HTTP requests
+   - Lazy load when appropriate
+   - Cache static assets
+
+3. **Accessibility**:
+   - Test with keyboard only
+   - Test with screen reader
+   - Ensure sufficient contrast
+   - Provide alternative text
+
+4. **Mobile**:
+   - Touch-friendly targets (44px+)
+   - No hover-dependent interactions
+   - Test on real devices
+   - Consider thumb zones
+
+### Development Guidelines
+
+1. **CSS Organization**:
+   - Group related styles
+   - Use comments for sections
+   - Avoid deep nesting
+   - Prefer classes over IDs
+
+2. **Naming Conventions**:
+   - BEM-like: `.block__element--modifier`
+   - Semantic: `.primary-btn` not `.blue-btn`
+   - Consistent: Use same terms across codebase
+
+3. **Maintainability**:
+   - Use CSS variables for colors, spacing
+   - Comment complex styles
+   - Keep media queries near relevant styles
+   - Modular, reusable components
+
+4. **Testing**:
+   - Test in multiple browsers
+   - Test at different screen sizes
+   - Test with different content lengths
+   - Test error states
+
+---
+
+## Future Enhancements
+
+### Planned UI Improvements
+
+1. **Dark Mode**
+   - Alternative color scheme
+   - Toggle in user settings
+   - Persist preference
+   - Maintain contrast ratios
+
+2. **Customizable Themes**
+   - User-selectable accent colors
+   - Background patterns
+   - Avatar styles
+   - Font size preferences
+
+3. **Enhanced Animations**
+   - Micro-interactions on all elements
+   - Page transitions
+   - Scroll-based animations
+   - Particle effects (optional)
+
+4. **Data Visualization**
+   - Study time charts (line, bar)
+   - Session completion pie charts
+   - Streak calendar heatmap
+   - Progress rings
+
+5. **Advanced Chat Features**
+   - Emoji picker
+   - Message reactions
+   - File sharing
+   - Code syntax highlighting
+   - @ mentions
+
+6. **Notification Center**
+   - In-app notification panel
+   - Notification badges
+   - Mark as read
+   - Notification preferences
+
+7. **Profile Customization**
+   - Avatar upload/selection
+   - Display name
+   - Bio/status
+   - Study goals
+
+### Accessibility Roadmap
+
+1. **High Contrast Mode**
+   - Maximum contrast ratios
+   - Thick borders
+   - No subtle shadows
+
+2. **Font Size Controls**
+   - Small, medium, large, extra large
+   - Maintains layout integrity
+   - Persist preference
+
+3. **Reduced Motion Mode**
+   - Disable all animations
+   - Instant transitions
+   - Static indicators
+
+4. **Voice Control**
+   - Voice commands integration
+   - Speech-to-text for chat
+   - Voice navigation
+
+5. **Screen Reader Optimization**
+   - Enhanced ARIA labels
+   - Live region improvements
+   - Better focus management
+
+### Technical Improvements
+
+1. **Progressive Web App (PWA)**
+   - Service worker
+   - Offline capability
+   - App-like experience
+   - Push notifications
+
+2. **Performance Optimization**
+   - Code splitting
+   - Image optimization (WebP)
+   - Lazy loading
+   - CDN integration
+
+3. **Advanced State Management**
+   - Better sync logic
+   - Optimistic updates
+   - Conflict resolution
+
+4. **Enhanced Real-time**
+   - Presence indicators (typing, online)
+   - Read receipts
+   - Cursor sharing (optional)
+
+---
+
+## Design Resources
+
+### Tools & Software
+
+**Design**:
+- Figma (UI design, prototyping)
+- Adobe XD (alternative)
+- Sketch (alternative)
+
+**Development**:
+- VS Code (code editor)
+- Chrome DevTools (debugging, testing)
+- Lighthouse (performance, accessibility)
+
+**Testing**:
+- BrowserStack (cross-browser)
+- WAVE (accessibility)
+- axe DevTools (accessibility)
+
+### External Dependencies
+
+**CSS Framework**:
+- Bootstrap 5.3.2
+- Documentation: https://getbootstrap.com/
+
+**Icons**:
+- Bootstrap Icons 1.10.5
+- Documentation: https://icons.getbootstrap.com/
+
+**Fonts**:
+- Inter (Google Fonts)
+- JetBrains Mono (Google Fonts)
+- https://fonts.google.com/
+
+**Real-time**:
+- Socket.io 4.7.2
+- Documentation: https://socket.io/
+
+### Asset Guidelines
+
+**Logo**:
+- Format: PNG with transparency
+- Sizes: 48px, 88px, 120px, 256px
+- Background: Transparent
+- Color: Full color or white for dark backgrounds
+
+**Icons**:
+- Library: Bootstrap Icons
+- Size: 1rem - 1.5rem (16px - 24px)
+- Color: Inherit or semantic colors
+- No custom icons (use library)
+
+**Images**:
+- Format: WebP (with fallback)
+- Optimization: Compress, responsive sizes
+- Alt text: Always provide
+- Lazy loading: Yes, for below-fold
+
+**Avatars**:
+- Generated: Color-coded circles with initials
+- Size: 32px standard, 40-48px for larger
+- Fallback: First letter of name
+- Custom uploads: Future feature
+
+---
+
+## Appendix
+
+### Color Reference Table
+
+| Color Name | Hex Code | RGB | Usage |
+|------------|----------|-----|-------|
+| Primary Blue | #1E3A8A | rgb(30, 58, 138) | Headers, CTAs, links |
+| Primary Light | #3B82F6 | rgb(59, 130, 246) | Gradients, hover states |
+| Secondary Green | #059669 | rgb(5, 150, 105) | Success, own messages |
+| Accent Orange | #EA580C | rgb(234, 88, 12) | Warnings, errors |
+| Gray 50 | #F8FAFC | rgb(248, 250, 252) | Backgrounds |
+| Gray 100 | #F1F5F9 | rgb(241, 245, 249) | Message bubbles |
+| Gray 200 | #E2E8F0 | rgb(226, 232, 240) | Borders |
+| Gray 400 | #94A3B8 | rgb(148, 163, 184) | Placeholders |
+| Gray 600 | #64748B | rgb(100, 116, 139) | Secondary text |
+| Gray 900 | #1E293B | rgb(30, 41, 59) | Primary text |
+| Success | #10B981 | rgb(16, 185, 129) | Success states |
+| Error | #DC2626 | rgb(220, 38, 38) | Error states |
+| Warning | #F59E0B | rgb(245, 158, 11) | Warnings |
+| Info | #0EA5E9 | rgb(14, 165, 233) | Info states |
+
+### Spacing Reference
+
+| Name | Value | Pixels | Usage |
+|------|-------|--------|-------|
+| space-1 | 0.25rem | 4px | Tight spacing |
+| space-2 | 0.5rem | 8px | Small gaps |
+| space-3 | 0.75rem | 12px | Medium gaps |
+| space-4 | 1rem | 16px | Standard spacing |
+| space-5 | 1.25rem | 20px | Large spacing |
+| space-6 | 1.5rem | 24px | Section spacing |
+| space-8 | 2rem | 32px | Major sections |
+| space-10 | 2.5rem | 40px | Page sections |
+
+### Typography Scale
+
+| Element | Size | Line Height | Weight | Usage |
+|---------|------|-------------|--------|-------|
+| h1 | 1.375rem (22px) | 1.4 | 700 | Page titles |
+| h2 | 1.25rem (20px) | 1.4 | 600 | Section headers |
+| h3 | 1.125rem (18px) | 1.5 | 600 | Subsections |
+| h4 | 1rem (16px) | 1.5 | 600 | Card titles |
+| h5 | 0.95rem (15.2px) | 1.5 | 600 | Small headers |
+| Body | 0.875rem (14px) | 1.5 | 400 | Standard text |
+| Small | 0.8rem (12.8px) | 1.4 | 400 | Secondary text |
+| Tiny | 0.7rem (11.2px) | 1.4 | 400 | Timestamps, labels |
+
+### Browser Support
+
+| Browser | Minimum Version | Notes |
+|---------|----------------|-------|
+| Chrome | 90+ | Recommended |
+| Firefox | 88+ | Recommended |
+| Safari | 14+ | Webkit prefixes |
+| Edge | 90+ | Chromium-based |
+| Mobile Safari | iOS 14+ | Touch optimizations |
+| Chrome Mobile | Android 90+ | Touch optimizations |
+
+**Not Supported**:
+- Internet Explorer (all versions)
+- Opera Mini
+- Legacy mobile browsers
+
+### File Structure
+
+```
+/css
+  - styles.css (global styles)
+  - auth.css (login/register)
+  - dashboard.css (dashboard)
+  - room.css (room page)
+  
+/js
+  - login.js
+  - register.js
+  - dashboard.js
+  - createRoom.js
+  - room.js
+  
+/images
+  - logo.png
+  - icons/
+  - avatars/ (future)
+  
+/fonts
+  - inter/ (if self-hosted)
+  - jetbrains-mono/
+```
+
+---
+
+## Conclusion
+
+This UI/UX documentation establishes comprehensive design standards for StudyMate. All interface elements, interactions, and visual designs should adhere to these guidelines to maintain consistency and quality across the platform.
+
+**Key Principles to Remember**:
+1. Consistency in design creates trust
+2. Accessibility is not optional
+3. Performance impacts user satisfaction
+4. Mobile users are first-class citizens
+5. Feedback makes interfaces feel responsive
+
+For questions, clarifications, or design decisions not covered in this document, please consult the design team or refer to established patterns in the existing codebase.
+
+---
+
+**Document Version**: 1.0  
+**Last Updated**: October 2025  
+**Maintained By**: StudyMate Design Team  
+**Contributors**: Mehakpreet Singh, Bisheshwar Das (Biku), Anusha
